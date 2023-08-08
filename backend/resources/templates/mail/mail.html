@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{subject}}</title>
+    <style>
+        body {
+            background-color: #f6f6f6;
+            color: #666666;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .button {
+            background-color: #0099ff;
+            border: none;
+            border-radius: 3px;
+            color: #ffffff;
+            display: inline-block;
+            font-size: 16px;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h4>{{greeting}}</h4>
+    <p>{{{content}}}</p>
+    <p>
+        {{#button.link}}
+        <a class="button" href="{{button.link}}">{{button.text}}</a>
+        {{/button.link}}
+    </p>
+    <p>{{footer}}</p>
+</body>
+
+</html>

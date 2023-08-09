@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { mergeStyleSets,  initializeIcons } from '@fluentui/react';
 import { DetailsList, DetailsListLayoutMode, Selection, DetailsRow, SelectionMode } from '@fluentui/react/lib/DetailsList';
 import { mergeStyles } from '@fluentui/react/lib/Styling';
@@ -14,7 +14,8 @@ const classNames = mergeStyleSets({
     overflow: 'auto',
     maxHeight: '400px',
     maxWidth: '100%',
-    border: '1px solid #ccc'
+    border: '1px solid #ccc',
+    whiteSpace: 'nowrap'
   },
 
   listItemCell: {
@@ -79,7 +80,7 @@ const exampleChildClass = mergeStyles({
   
 const textFieldStyles = { root: { maxWidth: '300px' } };
 
-const TodoList = ({items, onFilterItems, reload, onEdit}) => {
+const TodoList = ({items,col, onFilterItems, reload, onEdit}) => {
   const [loadedItems, setLoadedItems] = useState(10); // Jumlah tugas yang sudah dimuat
 
 
@@ -139,7 +140,7 @@ const TodoList = ({items, onFilterItems, reload, onEdit}) => {
       );
     }else{
         return (
-            <div className={item.done ? classNames.listItemCellDone : classNames.listItemCell}>{fieldContent}</div>
+            <div className={item.done ? classNames.listItemCellDone : classNames.listItemCell}>{ (fieldContent ? fieldContent : '-')}</div>
           );
     }
 
@@ -183,19 +184,10 @@ const TodoList = ({items, onFilterItems, reload, onEdit}) => {
     })
 }
 
-  const columns = [
-        { key: 'no', name: 'No', fieldName: 'id', minWidth: 30, maxWidth: 30, onRender: onRenderItemColumn},
-        { key: 'title', name: 'Task', fieldName: 'title', minWidth: 100, maxWidth: 300, onRender: onRenderItemColumn},
-        { key: 'name', name: 'Description', fieldName: 'description', minWidth: 100, maxWidth: 500, onRender: onRenderItemColumn},
-        {
-        key: 'action',
-        name: 'Action',
-        fieldName: 'action',
-        minWidth: 50,
-        maxWidth: 100,
-        onRender: onRenderItemColumn
-        }
-    ]
+  let columns = col.map((el) => {
+    el.onRender = onRenderItemColumn
+    return el
+  }) 
 
   return (
     <>
@@ -213,6 +205,7 @@ const TodoList = ({items, onFilterItems, reload, onEdit}) => {
                 selectionMode={SelectionMode.none}
                 columns={columns}
                 onRenderRow={_onRenderRow}
+                layoutMode={DetailsListLayoutMode.fixedColumns}
                 /> : 
                 <div style={{ textAlign: 'center', padding: '50px' }}>No Data</div>
             }

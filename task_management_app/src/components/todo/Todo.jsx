@@ -8,8 +8,6 @@ import FormAdd from './FormAdd';
 
 initializeIcons();
 
-const addIcon = { iconName: 'Add' };
-
 const Todo = ({field, id, reload, showBtn, _addClicked, data}) => {
     console.log(field);
  return (

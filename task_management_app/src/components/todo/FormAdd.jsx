@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
@@ -47,9 +47,28 @@ function FormAdd({field, id, onSuccess, saveClick, data}) {
     const [titleError, setTitleError] = useState('');
 
     // Optional Field
-    const [selectedDate, setSelectedDate] = useState(data ? data.date : null);
+    const [selectedDate, setSelectedDate] = useState(data ? new Date(data.date) : null);
     const [text, setText] = useState(data ? data.text : '');
     const [value, setValue] = useState(data ? data.number : '0');
+    const [form, setForm] = useState({
+      title : title,
+      description: description,
+      done: done
+    })
+    const [textBtn, setTextBtn] = useState(data && data.id ? 'Edit' : 'Add');
+    const [showToggle, setShowToggle] = useState(data ? true : false);
+
+    useEffect(() => {
+      setTitle(data ? data.title : '')
+      setDescription(data ? data.description : '')
+      setDone(data && data.done ? data.done : false)
+      setSelectedDate(data && data.date ? new Date(data.date) : null)
+      setText(data && data.text ? data.text : '')
+      setTextBtn(data ? 'Edit' : 'Add')
+      setValue(data && data.number ? data.number : '0')
+      setShowToggle(data ? true : false);
+      console.log('masuk');
+    }, [data]);
 
     const handleValueChange = (newValue) => {
       setValue(newValue);
@@ -58,12 +77,6 @@ function FormAdd({field, id, onSuccess, saveClick, data}) {
     const handleDateChange = (date) => {
       setSelectedDate(date);
     };
-
-    let form = {
-        title : title,
-        description: description,
-        done: done
-    }
 
 
     const validateTitle = () => {
@@ -86,6 +99,10 @@ function FormAdd({field, id, onSuccess, saveClick, data}) {
         setDescription(newValue);
       };
 
+      const handleTextChange = (event, newValue) => {
+        setText(newValue);
+      };
+
       function _onChange(ev,checked) {
         setDone(checked);
       }
@@ -94,20 +111,46 @@ function FormAdd({field, id, onSuccess, saveClick, data}) {
         setTitle('');
         setDescription('');
         setTitleError('');
+        setDescription('');
+        setDone(false);
+        setSelectedDate(null)
+        setText('');
+        setValue('0');
+        setTextBtn('Add')
+        setShowToggle(false)
       };
 
     async function saveTask() {
         if (validateTitle()) {
 
-            let url = data && data.id ? `/update/${data.id}` : '/add'
+            let url = data && data.id && showToggle ? `/update/${data.id}` : '/add'
+            let newForm = {...form}
 
-            if (data && data.id) {
-                form.id = data.id
+            newForm.title = title
+            newForm.description = description
+            newForm.done = done
+
+            if (data && data.id && showToggle) {
+                newForm.id = data.id
             }
+
+            if (selectedDate) {
+              newForm.date = selectedDate
+            }
+
+            if (text) {
+              newForm.text = text
+            }
+
+            if (value && value != '0') {
+              newForm.number= value
+            }
+
+            setForm(newForm);
             
             await api({
                 url: url,
-                data: form,
+                data: newForm,
                 method: data && data.id ? "put" : "post"
             })
             .then(response => {
@@ -136,7 +179,7 @@ function FormAdd({field, id, onSuccess, saveClick, data}) {
                 <TextField style={{ width: '550px' }} multiline autoAdjustHeight resizable={false} id={descFieldId} value={description}
                 onChange={handleDescChange} />
                 {   
-                    data &&
+                    showToggle &&
                     <Toggle label="Status" defaultChecked={done} onText="Done" offText="Not Yet" onChange={_onChange} />
                 }
                 <Droppable droppableId={id}>
@@ -176,7 +219,8 @@ function FormAdd({field, id, onSuccess, saveClick, data}) {
                                 el.id == '2' && (
                                   <>
                                   <Label className='my-2' htmlFor={el.id}>{el.title}</Label>
-                                  <TextField style={{ width: '550px' }} multiline autoAdjustHeight resizable={false} id={el.id} value={text}/>
+                                  <TextField style={{ width: '550px' }} multiline autoAdjustHeight resizable={false} id={el.id} value={text}
+                                    onChange={handleTextChange}/>
                                   </>
                                 )
                               }
@@ -209,8 +253,8 @@ function FormAdd({field, id, onSuccess, saveClick, data}) {
                 )}
               </Droppable>
                 <Stack gap={2} className="col-md-5 mx-auto" style={{ marginTop: '24px' }}>
-                    <PrimaryButton text={data && data.id ? "Edit":"Add"} allowDisabledFocus onClick={()=>saveTask()} />
-                    <DefaultButton text="Cancel" onClick={()=>saveClick()}/>
+                    <PrimaryButton text={textBtn} allowDisabledFocus onClick={()=>saveTask()} />
+                    <DefaultButton text="Cancel" onClick={()=>reset()}/>
                 </Stack>
             </form>
           </Col>

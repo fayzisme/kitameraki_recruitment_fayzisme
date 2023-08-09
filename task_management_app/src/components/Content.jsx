@@ -11,6 +11,7 @@ import api from '../helper/api'
 function Content({field, id}) {
   console.log(field);
     const [items, setItems] = useState([]);
+    const[col, setCol]= useState([]);
     const [showBtn, setShowBtn] = useState(true);
     const [dataEdit, setDataEdit] = useState(null)
 
@@ -35,8 +36,9 @@ function Content({field, id}) {
      // Simulasi get data tugas
         await api(payload)
         .then(response => {
-        console.log(response);
+        // console.log(response);
         setItems(response.data.tasks);
+        setCol(response.data.column);
         })
         .catch(error => {
             console.log(error)
@@ -67,7 +69,7 @@ function Content({field, id}) {
         </Row>
         <Row>
           <Col className='content'>
-            <TodoList items={items} onFilterItems={filterItems} reload={fetchData} onEdit={onEdit}/>
+            <TodoList items={items} col={col} onFilterItems={filterItems} reload={fetchData} onEdit={onEdit}/>
           </Col>
         </Row>
       </Container>

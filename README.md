@@ -6,20 +6,33 @@
 
 ## Run Backend
 
-### cd backend
+Install module with npm
 
-### cp .env.example => rename .env
+```bash
+  cd backend
+```
+#### cp .env.example => rename .env
 
-### npm install
+```bash
+  npm install
+```
 
-### npm start
+```bash
+  npm start
+```
 
 ## Run Frontend
 
-### cd ../task_management_app
+```bash
+  cd ../task_management_app
+```
 
-### npm install
+```bash
+  npm install
+```
 
 <h3>Run in development mode<h3>
 
-### npm run dev
+```bash
+  npm run dev
+```

@@ -1,7 +1,9 @@
-import { DefaultButton, Icon, mergeStyles } from '@fluentui/react/lib';
-
 import { useState } from 'react';
-import { DefaultButton, Icon, mergeStyles } from '@fluentui/react/lib';
+import { DefaultButton, Icon, mergeStyles } from '@fluentui/react';
+
+import Header from "./Header";
+import Content from './Content';
+import Footer from './Footer';
 
 const Sidebar = () => {
   const [expanded, setExpanded] = useState(true);
@@ -11,7 +13,7 @@ const Sidebar = () => {
   };
 
   const sidebarStyles = mergeStyles({
-    width: expanded ? '250px' : '50px',
+    width: expanded ? '250px' : '80px',
     height: '100vh',
     backgroundColor: '#333',
     color: 'white',
@@ -37,13 +39,16 @@ const Sidebar = () => {
           iconProps={{ iconName: expanded ? 'ChevronLeft' : 'ChevronRight' }}
           styles={{
             root: {
-              width: '50px',
+              width: expanded ? '100%' : '80px',
               height: '50px',
               fontSize: '20px',
               backgroundColor: 'transparent',
               border: 'none',
-              color: 'white',
+              color: 'white'
             },
+            rootHovered: {
+              width: '100%'
+            }
           }}
         />
         {expanded && (
@@ -55,7 +60,9 @@ const Sidebar = () => {
         )}
       </div>
       <div className={contentStyles}>
-        <h1>Content Area</h1>
+      <Header/>
+      <Content/>
+      <Footer className='footer'/>
       </div>
     </div>
   );

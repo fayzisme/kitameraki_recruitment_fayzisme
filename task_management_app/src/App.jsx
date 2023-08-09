@@ -7,10 +7,10 @@ import Sidebar from './components/Sidebar';
 function App() {
   return (
     <>
-      <Header/>
+      {/* <Header/> */}
       <Sidebar/>
-      <Content/>
-      <Footer className='footer'/>
+      {/* <Content/>
+      <Footer className='footer'/> */}
     </>
   )
 }

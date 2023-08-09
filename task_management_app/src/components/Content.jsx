@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Todo from './todo/Todo';
 import TodoList from './todo/TodoList';
+import KanbanBoard from "./Kanbanboard";
 
 import api from '../helper/api'
 
@@ -57,7 +58,7 @@ function Content() {
      }
 
     return (
-      <Container>
+      <Container className='container-mod'>
         <Row className="justify-content-md-center">
           <Col className='content' md="auto">
             <Todo showBtn={showBtn} _addClicked={_addClicked} reload={fetchData} data={dataEdit}/>
@@ -66,6 +67,11 @@ function Content() {
         <Row>
           <Col className='content'>
             <TodoList items={items} onFilterItems={filterItems} reload={fetchData} onEdit={onEdit}/>
+          </Col>
+        </Row>
+        <Row>
+          <Col className='content'>
+            <KanbanBoard/>
           </Col>
         </Row>
       </Container>

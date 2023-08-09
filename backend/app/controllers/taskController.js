@@ -2,6 +2,16 @@ const { errorHandler } = require('../../utils')
 
 let tasks = [];
 
+// data dummy
+for (let index = 0; index < 20; index++) {
+    tasks.push({
+        id: index + 1,
+        title: 'Dummy',
+        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium doloribus earum eius quisquam quaerat ad eos quod. Voluptas impedit omnis adipisci? Quis enim quos maxime ipsam. Repellendus optio, aperiam pariatur explicabo nesciunt dicta eius iusto. Quisquam earum, quas maxime obcaecati qui minus consectetur eum repudiandae magnam alias iste explicabo totam!',
+        done: false
+    })
+}
+
 class TaskController {
     async add (req, res) {
         try {

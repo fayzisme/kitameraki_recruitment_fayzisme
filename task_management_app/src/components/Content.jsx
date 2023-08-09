@@ -4,11 +4,12 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Todo from './todo/Todo';
 import TodoList from './todo/TodoList';
-import KanbanBoard from "./Kanbanboard";
+import { Droppable } from "react-beautiful-dnd";
 
 import api from '../helper/api'
 
-function Content() {
+function Content({field, id}) {
+  console.log(field);
     const [items, setItems] = useState([]);
     const [showBtn, setShowBtn] = useState(true);
     const [dataEdit, setDataEdit] = useState(null)
@@ -61,17 +62,12 @@ function Content() {
       <Container className='container-mod'>
         <Row className="justify-content-md-center">
           <Col className='content' md="auto">
-            <Todo showBtn={showBtn} _addClicked={_addClicked} reload={fetchData} data={dataEdit}/>
+            <Todo field={field} id={id} showBtn={showBtn} _addClicked={_addClicked} reload={fetchData} data={dataEdit}/>
           </Col>
         </Row>
         <Row>
           <Col className='content'>
             <TodoList items={items} onFilterItems={filterItems} reload={fetchData} onEdit={onEdit}/>
-          </Col>
-        </Row>
-        <Row>
-          <Col className='content'>
-            <KanbanBoard/>
           </Col>
         </Row>
       </Container>

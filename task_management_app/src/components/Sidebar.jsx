@@ -1,10 +1,33 @@
 import { useState, useEffect } from 'react';
-import { DefaultButton, Icon, mergeStyles } from '@fluentui/react';
+import { DefaultButton, mergeStyles } from '@fluentui/react';
 import { DragDropContext } from "react-beautiful-dnd";
 
 import Header from "./Header";
 import Content from './Content';
 import Footer from './Footer';
+import ListMenu from "./ListMenu";
+
+const menuItems = [
+  {
+    id: 1,
+    title: 'Date Picker',
+    value: null,
+    icon: 'Calendar'
+  },
+  {
+    id: 2,
+    title: 'Text',
+    value: null,
+    icon: 'TextField'
+  },
+  {
+    id: 3,
+    title: 'Spin Number',
+    value: null,
+    icon: 'NumberField'
+  },
+  // ...Tambahkan item menu lainnya...
+];
 
 const Sidebar = () => {
   const [expanded, setExpanded] = useState(true);
@@ -16,7 +39,7 @@ const Sidebar = () => {
   };
 
   const sidebarStyles = mergeStyles({
-    width: expanded ? '250px' : '80px',
+    width: expanded ? '150px' : '80px',
     height: '100vh',
     backgroundColor: '#333',
     color: 'white',
@@ -29,19 +52,14 @@ const Sidebar = () => {
   });
 
   const contentStyles = mergeStyles({
-    marginLeft: expanded ? '250px' : '50px',
+    marginLeft: expanded ? '150px' : '50px',
     padding: '16px',
     transition: 'margin 0.3s ease-in-out',
   });
 
   useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/todos")
-      .then((response) => response.json())
-      .then((json) => {
-        console.log(json);
-        setCompleted(json.filter((task) => task.completed));
-        setIncomplete(json.filter((task) => !task.completed));
-      });
+    setCompleted([]);
+    setIncomplete(menuItems);
   }, []);
 
   const handleDragEnd = (result) => {
@@ -101,16 +119,12 @@ const Sidebar = () => {
           }}
         />
         {expanded && (
-          <ul>
-            <li>Menu Item 1</li>
-            <li>Menu Item 2</li>
-            <li>Menu Item 3</li>
-          </ul>
+        <ListMenu menuItems={incomplete} id={"1"}/>
         )}
       </div>
       <div className={contentStyles}>
       <Header/>
-      <Content/>
+      <Content field={completed} id={"2"}/>
       <Footer className='footer'/>
       </div>
       </DragDropContext>

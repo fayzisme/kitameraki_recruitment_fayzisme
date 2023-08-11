@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { mergeStyleSets,  initializeIcons } from '@fluentui/react';
 import { DetailsList, DetailsListLayoutMode, Selection, DetailsRow, SelectionMode } from '@fluentui/react/lib/DetailsList';
 import { mergeStyles } from '@fluentui/react/lib/Styling';
@@ -12,7 +12,7 @@ initializeIcons();
 const classNames = mergeStyleSets({
   listContainer: {
     overflow: 'auto',
-    maxHeight: '400px',
+    maxHeight: '500px',
     maxWidth: '100%',
     border: '1px solid #ccc',
     whiteSpace: 'nowrap'
@@ -81,8 +81,17 @@ const exampleChildClass = mergeStyles({
 const textFieldStyles = { root: { maxWidth: '300px' } };
 
 const TodoList = ({items,col, onFilterItems, reload, onEdit}) => {
-  const [loadedItems, setLoadedItems] = useState(10); // Jumlah tugas yang sudah dimuat
-
+  const [loadedItems, setLoadedItems] = useState(10);
+  const [columns1, setColumns] = useState([]);  // Jumlah tugas yang sudah dimuat
+  
+  useEffect(() => {
+    // Efek ini akan dijalankan setiap kali'col' berubah
+    setColumns(col.map((el,i) => {
+      el.onRender = onRenderItemColumn
+      return el
+    }))
+  
+  }, [col]);
 
   const _onFilter = (ev, text) => {
     onFilterItems(text)
@@ -184,10 +193,7 @@ const TodoList = ({items,col, onFilterItems, reload, onEdit}) => {
     })
 }
 
-  let columns = col.map((el) => {
-    el.onRender = onRenderItemColumn
-    return el
-  }) 
+  
 
   return (
     <>
@@ -203,9 +209,8 @@ const TodoList = ({items,col, onFilterItems, reload, onEdit}) => {
                 <DetailsList
                 items={items.slice(0, loadedItems)}
                 selectionMode={SelectionMode.none}
-                columns={columns}
+                columns={columns1}
                 onRenderRow={_onRenderRow}
-                layoutMode={DetailsListLayoutMode.fixedColumns}
                 /> : 
                 <div style={{ textAlign: 'center', padding: '50px' }}>No Data</div>
             }

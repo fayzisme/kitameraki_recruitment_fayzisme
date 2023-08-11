@@ -89,10 +89,6 @@ class TaskController {
                 maxWidth: 280
             })
 
-            if (otherColumn.length > 1) {
-                newColumn[2].maxWidth = 200
-            }
-
             res.json({tasks:newTask, column: [...newColumn, ...otherColumn]});
         } catch (error) {
             res.status(error.code||500).json(errorHandler.message(error))
